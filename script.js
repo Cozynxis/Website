@@ -1,39 +1,43 @@
-const menuButton = document.querySelector('.menu-toggle');
-const nav = document.querySelector('.nav-links');
-
-menuButton?.addEventListener('click', () => {
-  const isOpen = nav.classList.toggle('open');
-  menuButton.setAttribute('aria-expanded', String(isOpen));
-  menuButton.setAttribute('aria-label', isOpen ? 'Menu sluiten' : 'Menu openen');
-});
-
-nav?.querySelectorAll('a').forEach(link => {
-  link.addEventListener('click', () => {
-    nav.classList.remove('open');
-    menuButton?.setAttribute('aria-expanded', 'false');
-  });
-});
-
-document.querySelector('#year').textContent = new Date().getFullYear();
-
-const copyButton = document.querySelector('#copy-ip');
-const serverAddress = document.querySelector('#server-address');
-const copyFeedback = document.querySelector('#copy-feedback');
-
-copyButton?.addEventListener('click', async () => {
-  const address = serverAddress.textContent.trim();
-  if (address === 'play.jouwserver.nl') {
-    copyFeedback.textContent = 'Stel eerst het echte serveradres in via index.html.';
-    return;
-  }
-  try {
-    await navigator.clipboard.writeText(address);
-    copyButton.innerHTML = 'Gekopieerd! <span>✓</span>';
-    copyFeedback.textContent = 'Serveradres gekopieerd. Tijd om Minecraft te starten!';
-    window.setTimeout(() => {
-      copyButton.innerHTML = 'Kopieer IP <span>▣</span>';
-    }, 1800);
-  } catch {
-    copyFeedback.textContent = 'Kopiëren lukte niet. Selecteer het serveradres en kopieer het handmatig.';
-  }
-});
+const app=document.querySelector('#app');
+const nav=document.querySelector('.main-nav');
+const menuButton=document.querySelector('.menu-toggle');
+const pageData={
+'/':{title:'Waar sprookjes gebouwd worden.',sub:'Welkom in een andere wereld',description:'Stap binnen in de Minecraft Efteling. Dwaal door betoverende werelden, ontdek bijzondere attracties en beleef samen de magie van het park.'},
+'/ontdekken':{title:'Ontdek het park.',sub:'Ontdekken',description:'Alles wat je wilt weten voor je op avontuur gaat.'},
+'/ontdekken/openingstijden':{title:'Openingstijden',sub:'Ontdekken / Praktische informatie',description:'Plan je bezoek en ontdek wanneer je de wereld kunt komen verkennen.'},
+'/ontdekken/attracties':{title:'Attracties',sub:'Ontdekken / Beleef het avontuur',description:'Van sprookjesachtige wandelingen tot indrukwekkende bouwwerken: ontdek de attracties van het park.'},
+'/ontdekken/regels':{title:'Parkregels',sub:'Ontdekken / Samen houden we het magisch',description:'Met een paar eenvoudige afspraken houden we het park gezellig, veilig en fijn voor iedereen.'},
+'/ontdekken/parkshows':{title:'Parkshows',sub:'Ontdekken / Verhalen komen tot leven',description:'Ontdek bijzondere presentaties, evenementen en shows in de Minecraft Efteling.'},
+'/team':{title:'Ons team',sub:'Ons team / Team',description:'Maak kennis met de mensen die bouwen, organiseren en de magie achter de schermen mogelijk maken.'},
+'/vacatures':{title:'Vacatures',sub:'Ons team / Vacatures',description:'Wil jij meehelpen bouwen aan de Minecraft Efteling? Bekijk hoe je kunt bijdragen.'},
+'/nieuws':{title:'Nieuws uit het park',sub:'Nieuws',description:'Updates, bouwprojecten en aankondigingen uit de wereld van Minecraft Efteling.'},
+'/contact':{title:'We horen graag van je.',sub:'Contact',description:'Een vraag, idee of wil je samenwerken? Stuur ons gerust een bericht.'}
+};
+function home(){return document.querySelector('.home-hero').outerHTML+
+document.querySelector('.welcome').outerHTML+
+document.querySelector('.discover').outerHTML+
+document.querySelector('.quote-band').outerHTML+
+document.querySelector('.team-teaser').outerHTML+
+document.querySelector('.bottom-cta').outerHTML;}
+function pageShell(path,body){const d=pageData[path]||pageData['/'];return '<section class="page-hero route-fade"><div class="breadcrumbs"><a href="#/">Home</a>　/　'+d.sub+'</div><div class="eyebrow"><span></span> MINECRAFT EFTELING</div><h1>'+d.title.replace(/(Attracties|Openingstijden|Parkregels|Parkshows|Ons team|Vacatures|Nieuws uit het park)/g,'<em>$1</em>')+'</h1><p>'+d.description+'</p></section><section class="page-body route-fade">'+body+'</section>';}
+function discoverPage(){return '<div class="page-intro"><h2>Waar wil je beginnen?</h2><p>Kies wat je wilt ontdekken en bereid je bezoek voor.</p></div><div class="info-grid"><a class="info-card" href="#/ontdekken/openingstijden"><span class="symbol">◷</span><h3>Openingstijden</h3><p>Bekijk de bezoekinformatie.</p></a><a class="info-card" href="#/ontdekken/attracties"><span class="symbol">✧</span><h3>Attracties</h3><p>Ontdek de plekken in het park.</p></a><a class="info-card" href="#/ontdekken/parkshows"><span class="symbol">♫</span><h3>Parkshows</h3><p>Bekijk evenementen en shows.</p></a><a class="info-card" href="#/ontdekken/regels"><span class="symbol">❖</span><h3>Parkregels</h3><p>Zo houden we het samen gezellig.</p></a></div>';}
+function bodyFor(path){
+if(path==='/ontdekken')return discoverPage();
+if(path==='/ontdekken/openingstijden')return '<div class="page-intro"><h2>Wanneer kun je langskomen?</h2><p>We willen je graag de juiste tijden geven. De actuele openingstijden zijn nog niet doorgegeven, dus we tonen hier geen verzonnen tijden.</p></div><div class="hours-box"><div><span class="tag">BEZOEK PLANNEN</span><br><strong>Openingstijden volgen binnenkort</strong><p>Houd deze pagina in de gaten voor de officiële parkplanning.</p></div><span class="symbol">◷</span></div><div class="notice">Let op: dit is een Minecraft-fanproject. Controleer voor je bezoek de aankondigingen van de server.</div>';
+if(path==='/ontdekken/attracties')return '<div class="page-intro"><h2>Er valt veel te beleven</h2><p>Dit overzicht is klaar om gevuld te worden met de echte attracties en screenshots van jullie Minecraft-park.</p></div><div class="attraction-grid"><article class="attraction-card"><img src="https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=700&q=80" alt="Sprookjesachtig bos" loading="lazy"><div><span class="tag">ONTDEKKEN</span><h3>Het Sprookjesbos</h3><p>Wandel langs magische plekken en laat je verrassen door de details.</p></div></article><article class="attraction-card"><img src="https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=700&q=80" alt="Sterrenhemel" loading="lazy"><div><span class="tag">AVONTUUR</span><h3>Betoverende werelden</h3><p>Verken bijzondere omgevingen die met blokken tot leven zijn gebracht.</p></div></article><article class="attraction-card"><img src="https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=700&q=80" alt="Bergen en meer" loading="lazy"><div><span class="tag">IN AANBOUW</span><h3>Meer attracties</h3><p>De lijst kan worden uitgebreid met jullie echte attractienamen.</p></div></article></div>';
+if(path==='/ontdekken/regels')return '<div class="page-intro"><h2>Een fijne wereld maken we samen</h2><p>Respecteer andere spelers en help mee om het park voor iedereen leuk te houden.</p></div><div class="info-grid"><article class="info-card"><span class="symbol">♡</span><h3>Wees vriendelijk</h3><p>Behandel bezoekers en teamleden met respect. Schelden, pesten en discriminatie horen hier niet thuis.</p></article><article class="info-card"><span class="symbol">✧</span><h3>Laat bouwwerken heel</h3><p>Breek of wijzig niets zonder toestemming. Respecteer de creaties van anderen.</p></article><article class="info-card"><span class="symbol">⌘</span><h3>Speel eerlijk</h3><p>Gebruik geen cheats, hacks of exploits en volg aanwijzingen van het team op.</p></article><article class="info-card"><span class="symbol">☏</span><h3>Geen spam</h3><p>Houd chat en eventuele communitykanalen prettig en overzichtelijk.</p></article><article class="info-card"><span class="symbol">⚑</span><h3>Volg teaminstructies</h3><p>Het team helpt om alles soepel en veilig te laten verlopen.</p></article><article class="info-card"><span class="symbol">✦</span><h3>Help mee</h3><p>Meld problemen netjes bij het team en geef anderen de ruimte om te genieten.</p></article></div><div class="notice">Dit is een voorlopig reglement. Vervang of vul het aan met de officiële regels van jullie server.</div>';
+if(path==='/ontdekken/parkshows')return '<div class="page-intro"><h2>Verhalen om samen te beleven</h2><p>Gebruik deze pagina voor showtijden, evenementen, parades en speciale parkmomenten.</p></div><div class="info-grid"><article class="info-card"><span class="symbol">♫</span><h3>Parkshows</h3><p>Informatie over shows wordt hier binnenkort toegevoegd.</p></article><article class="info-card"><span class="symbol">✦</span><h3>Speciale evenementen</h3><p>Houd deze plek in de gaten voor aankondigingen en seizoensactiviteiten.</p></article><article class="info-card"><span class="symbol">◷</span><h3>Showtijden</h3><p>De actuele planning volgt zodra de tijden bekend zijn.</p></article></div>';
+if(path==='/team')return '<div class="page-intro"><h2>De mensen achter de magie</h2><p>De teamleden en functies kunnen hieronder worden ingevuld. Er zijn nog geen namen opgegeven, daarom verzinnen we geen medewerkers.</p></div><div class="team-grid"><article class="person-card"><div class="person-mark">✧</div><div><span class="tag">BOUWTEAM</span><h3>Bouwers</h3><p>Bouwen aan de gebieden, details en sfeer van het park.</p></div></article><article class="person-card"><div class="person-mark">⌘</div><div><span class="tag">COMMUNITY</span><h3>Moderatie</h3><p>Helpt de community gezellig en respectvol te houden.</p></div></article><article class="person-card"><div class="person-mark">❖</div><div><span class="tag">ORGANISATIE</span><h3>Parkteam</h3><p>Werkt aan planning, activiteiten en parkbeleving.</p></div></article></div><p><a class="underlink" href="#/vacatures">Ook meebouwen? Bekijk de vacatures →</a></p>';
+if(path==='/vacatures')return '<div class="page-intro"><h2>Bouw mee aan het avontuur</h2><p>Heb je ideeën, bouwervaring of zin om de community te helpen? Hieronder staan voorbeeldrollen die jullie kunnen aanpassen aan de echte openstaande functies.</p></div><div class="vacancy"><div><span class="tag">CREATIEF</span><h3>Minecraft-bouwer</h3><p>Help met het bouwen en afwerken van gebieden en attracties.</p></div><a class="small-button" href="#/contact?onderwerp=vacature">Interesse tonen ↗</a></div><div class="vacancy"><div><span class="tag">COMMUNITY</span><h3>Community helper</h3><p>Help bezoekers, beantwoord vragen en draag bij aan een fijne sfeer.</p></div><a class="small-button" href="#/contact?onderwerp=vacature">Interesse tonen ↗</a></div><div class="vacancy"><div><span class="tag">ORGANISATIE</span><h3>Eventmedewerker</h3><p>Denk mee over activiteiten en help evenementen organiseren.</p></div><a class="small-button" href="#/contact?onderwerp=vacature">Interesse tonen ↗</a></div><div class="notice">Dit zijn voorbeeldvacatures, geen bevestigde openstaande functies. Vraag via Contact na of er plekken beschikbaar zijn.</div>';
+if(path==='/nieuws')return '<div class="page-intro"><h2>Nieuws en updates</h2><p>Nieuwe bouwprojecten, evenementen en aankondigingen verschijnen op deze pagina.</p></div><div class="news-grid"><article class="news-item"><img src="https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=700&q=80" alt="Boslandschap" loading="lazy"><div><span class="tag">WEBSITE</span><h3>De website is geopend</h3><p>Welkom op de nieuwe website van Minecraft Efteling. Hier vind je binnenkort meer informatie over het park.</p></div></article><article class="news-item"><img src="https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=700&q=80" alt="Berglandschap" loading="lazy"><div><span class="tag">AANKONDIGING</span><h3>Meer nieuws volgt</h3><p>Nieuwe updates en bouwvoortgang worden hier gedeeld zodra er nieuws beschikbaar is.</p></div></article></div>';
+if(path==='/contact')return '<div class="contact-layout"><div><h2>Stuur ons een bericht</h2><p>Heb je een vraag over het park, wil je solliciteren of heb je een leuk idee? We horen graag van je.</p><div class="notice">Het contactformulier is nog niet gekoppeld aan een mailserver. Met de knop hieronder kun je alvast je bericht voorbereiden in je eigen e-mailprogramma.</div></div><form class="contact-form" id="contact-form"><label>Je naam<input name="name" required placeholder="Hoe mogen we je noemen?"></label><label>E-mailadres<input type="email" name="email" required placeholder="jij@voorbeeld.nl"></label><label>Onderwerp<select name="subject"><option>Algemene vraag</option><option>Vacature</option><option>Suggestie</option><option>Probleem melden</option></select></label><label>Je bericht<textarea name="message" required placeholder="Vertel ons waar we mee kunnen helpen..."></textarea></label><button class="btn btn-dark" type="submit">Bericht voorbereiden ↗</button><p class="form-note" id="form-note">Er wordt niets automatisch verstuurd.</p></form></div>';
+return discoverPage();}
+function currentPath(){let path=location.hash.replace(/^#/,'').split('?')[0]||'/';if(path.length>1)path=path.replace(/\/$/,'');return pageData[path]?path:'/';}
+function render(){const path=currentPath();if(path==='/'){app.innerHTML=home();}else{app.innerHTML=pageShell(path,bodyFor(path));}document.title=(path==='/'?'Home':pageData[path].title)+' | Minecraft Efteling';document.querySelectorAll('.main-nav [data-route]').forEach(a=>a.classList.toggle('active',a.getAttribute('data-route')===path||(path.startsWith('/ontdekken')&&a.getAttribute('data-route')==='/ontdekken')||(path==='/team'||path==='/vacatures')&&a.textContent.trim()==='Ons team'));nav.classList.remove('open');menuButton?.setAttribute('aria-expanded','false');document.querySelectorAll('.nav-group').forEach(g=>g.classList.remove('menu-open'));document.querySelectorAll('.nav-trigger').forEach(b=>b.setAttribute('aria-expanded','false'));const subject=new URLSearchParams(location.hash.split('?')[1]||'').get('onderwerp');const select=document.querySelector('#contact-form select[name="subject"]');if(subject==='vacature'&&select)select.value='Vacature';}
+menuButton?.addEventListener('click',()=>{const open=nav.classList.toggle('open');menuButton.setAttribute('aria-expanded',String(open));});
+document.querySelectorAll('.nav-trigger').forEach(button=>button.addEventListener('click',()=>{const group=button.closest('.nav-group');const open=group.classList.toggle('menu-open');button.setAttribute('aria-expanded',String(open));document.querySelectorAll('.nav-group').forEach(other=>{if(other!==group){other.classList.remove('menu-open');other.querySelector('.nav-trigger').setAttribute('aria-expanded','false');}});}));
+document.addEventListener('click',e=>{const link=e.target.closest('a[href^="#/"]');if(link){nav?.classList.remove('open');menuButton?.setAttribute('aria-expanded','false');}});
+window.addEventListener('hashchange',render);
+document.addEventListener('submit',e=>{if(e.target.id!=='contact-form')return;e.preventDefault();const form=e.target;const data=new FormData(form);const subject='Minecraft Efteling - '+data.get('subject');const body='Naam: '+data.get('name')+'\nE-mail: '+data.get('email')+'\n\n'+data.get('message');const mailto='mailto:?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);document.querySelector('#form-note').textContent='Je e-mailprogramma wordt geopend. Vul het officiële contactadres in als ontvanger.';window.location.href=mailto;});
+document.querySelector('#year').textContent=new Date().getFullYear();
+render();
