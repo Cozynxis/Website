@@ -1,6 +1,7 @@
 const app=document.querySelector('#app');
 const nav=document.querySelector('.main-nav');
 const menuButton=document.querySelector('.menu-toggle');
+const homeMarkup=app.innerHTML;
 const pageData={
 '/':{title:'Waar sprookjes gebouwd worden.',sub:'Welkom in een andere wereld',description:'Stap binnen in de Minecraft Efteling. Dwaal door betoverende werelden, ontdek bijzondere attracties en beleef samen de magie van het park.'},
 '/ontdekken':{title:'Ontdek het park.',sub:'Ontdekken',description:'Alles wat je wilt weten voor je op avontuur gaat.'},
@@ -13,12 +14,7 @@ const pageData={
 '/nieuws':{title:'Nieuws uit het park',sub:'Nieuws',description:'Updates, bouwprojecten en aankondigingen uit de wereld van Minecraft Efteling.'},
 '/contact':{title:'We horen graag van je.',sub:'Contact',description:'Een vraag, idee of wil je samenwerken? Stuur ons gerust een bericht.'}
 };
-function home(){return document.querySelector('.home-hero').outerHTML+
-document.querySelector('.welcome').outerHTML+
-document.querySelector('.discover').outerHTML+
-document.querySelector('.quote-band').outerHTML+
-document.querySelector('.team-teaser').outerHTML+
-document.querySelector('.bottom-cta').outerHTML;}
+function home(){return homeMarkup;}
 function pageShell(path,body){const d=pageData[path]||pageData['/'];return '<section class="page-hero route-fade"><div class="breadcrumbs"><a href="#/">Home</a>　/　'+d.sub+'</div><div class="eyebrow"><span></span> MINECRAFT EFTELING</div><h1>'+d.title.replace(/(Attracties|Openingstijden|Parkregels|Parkshows|Ons team|Vacatures|Nieuws uit het park)/g,'<em>$1</em>')+'</h1><p>'+d.description+'</p></section><section class="page-body route-fade">'+body+'</section>';}
 function discoverPage(){return '<div class="page-intro"><h2>Waar wil je beginnen?</h2><p>Kies wat je wilt ontdekken en bereid je bezoek voor.</p></div><div class="info-grid"><a class="info-card" href="#/ontdekken/openingstijden"><span class="symbol">◷</span><h3>Openingstijden</h3><p>Bekijk de bezoekinformatie.</p></a><a class="info-card" href="#/ontdekken/attracties"><span class="symbol">✧</span><h3>Attracties</h3><p>Ontdek de plekken in het park.</p></a><a class="info-card" href="#/ontdekken/parkshows"><span class="symbol">♫</span><h3>Parkshows</h3><p>Bekijk evenementen en shows.</p></a><a class="info-card" href="#/ontdekken/regels"><span class="symbol">❖</span><h3>Parkregels</h3><p>Zo houden we het samen gezellig.</p></a></div>';}
 function bodyFor(path){
